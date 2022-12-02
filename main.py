@@ -1,25 +1,26 @@
 import discord
-#import asyncio
 import os
 from discord import app_commands
+from discord.ext import commands
 from dotenv import load_dotenv
 
-class MyClient(discord.Client):
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
-
-    async def on_ready(self):
-        await tree.sync(guild=discord.Object(id=855003897138774048))
-        print("--Twilight\'s online--")
-    
-client=MyClient(intents=discord.Intents.default())
-tree=app_commands.CommandTree(client)
+client=discord.Client()
 load_dotenv()
 TOKEN=os.getenv("TOKEN")
+client=commands.Bot(command_prefix=";", intents=discord.Intents.all())
 
-@tree.context_menu(name="ping", guild=None)
-async def ping(interaction:discord.Interaction,message:discord.Message):
-    await interaction.response.send_message(f"```Pong! \nLATENCY: {client.latency*1000:,.0f} ms```")
+@client.event
+async def on_ready():
+    print("--Twilight\'s online!--")
+    try:
+        sync=await client.tree.sync()
+        print(f"commands synced: {len(sync)}")
+    except Exception as e:
+        print(e)
+
+@client.tree.command(name="ping")
+async def ping(interaction:discord.Interaction):
+    await interaction.response.send_message(f"```Pong! \nLATENCY: {client.latency*1000:,.0f} ms```", ephemeral=True)
 
 
 client.run(TOKEN)
