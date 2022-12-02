@@ -5,8 +5,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 intents=discord.Intents.all()
-client=discord.Client(intents=intents)
-client=commands.Bot(command_prefix=";")
+client=commands.Bot(command_prefix=";", intents=intents)
 load_dotenv()
 TOKEN=os.getenv("TOKEN")
 
