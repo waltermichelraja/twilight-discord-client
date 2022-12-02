@@ -10,10 +10,9 @@ client=commands.Bot(command_prefix=";", intents=intents)
 load_dotenv()
 TOKEN=os.getenv("TOKEN")
 
-status=cycle(["Songs", ";help"])
 @client.event
 async def on_ready():
-    change_status.start()
+    client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=";help"))
     print("--Twilight\'s online!--")
     try:
         sync=await client.tree.sync()
@@ -21,9 +20,6 @@ async def on_ready():
     except Exception as e:
         print(e)
 
-@tasks.loop(minutes=5)
-async def change_status():
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"{status}"))
 
 @client.tree.command(name="ping", description="sends client latency")
 async def ping(interaction:discord.Interaction):
