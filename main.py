@@ -4,10 +4,12 @@ from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
 
-client=discord.Client(intents=discord.Intents.default())
+intents=discord.Intents.default()
+intents.message_content=True
+client=discord.Client(intents=intents)
+client=commands.Bot(command_prefix=";")
 load_dotenv()
 TOKEN=os.getenv("TOKEN")
-client=commands.Bot(command_prefix=";")
 
 @client.event
 async def on_ready():
