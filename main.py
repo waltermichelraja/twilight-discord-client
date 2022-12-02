@@ -12,7 +12,7 @@ TOKEN=os.getenv("TOKEN")
 
 @client.event
 async def on_ready():
-    client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=";help"))
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=";help"))
     print("--Twilight\'s online!--")
     try:
         sync=await client.tree.sync()
