@@ -18,7 +18,7 @@ load_dotenv()
 TOKEN=os.getenv("TOKEN")
 
 @tree.context.menu(name="ping")
-async def ping(interaction:discord.Interaction,message=discord.Message):
+async def ping(interaction:discord.Interaction,message:discord.Message):
     await interaction.response.send_message(f"```Pong! \nLATENCY: {client.latency*1000:,.0f} ms```")
 
 
