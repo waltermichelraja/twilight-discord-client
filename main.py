@@ -2,11 +2,11 @@ import discord
 import os
 from discord import app_commands
 from discord.ext import commands, tasks
+from itertools import cycle
 from dotenv import load_dotenv
 
 intents=discord.Intents.all()
 client=commands.Bot(command_prefix=";", intents=intents)
-tree=app_commands.CommandTree(client)
 load_dotenv()
 TOKEN=os.getenv("TOKEN")
 
@@ -21,7 +21,7 @@ async def on_ready():
         print(e)
 
 
-@tree.context_menu(name="ping", description="sends client latency")
+@client.tree.command(name="ping", description="sends client latency")
 async def ping(interaction:discord.Interaction):
     await interaction.response.send_message(f"```Pong! \nLATENCY: {client.latency*1000:,.0f} ms```", ephemeral=True)
 
