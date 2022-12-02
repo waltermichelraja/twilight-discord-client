@@ -4,8 +4,7 @@ from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
 
-intents=discord.Intents.default()
-intents.message_content=True
+intents=discord.Intents.all()
 client=discord.Client(intents=intents)
 client=commands.Bot(command_prefix=";")
 load_dotenv()
