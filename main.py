@@ -2,6 +2,7 @@ import discord
 import os
 from discord import app_commands
 from discord.ext import commands, tasks
+from itertools import cycle
 from dotenv import load_dotenv
 
 intents=discord.Intents.all()
@@ -9,7 +10,7 @@ client=commands.Bot(command_prefix=";", intents=intents)
 load_dotenv()
 TOKEN=os.getenv("TOKEN")
 
-status=(["SONGS", ";HELP"])
+status=cycle(["Songs", ";help"])
 @client.event
 async def on_ready():
     change_status.start()
