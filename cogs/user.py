@@ -10,5 +10,5 @@ class User(commands.Cog):
     async def cog(self, interaction:discord.Interaction):
         await interaction.response.send_message("hello!", ephemeral=True)
 
-async def setup(client):
-    await client.add_cog(User(client))
+def setup(client):
+    client.add_cog(User(client))
