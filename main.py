@@ -28,7 +28,7 @@ async def on_ready():
 async def ping(interaction:discord.Interaction):
     uptime = str(datetime.timedelta(seconds=int(round(time.time()-startTime))))
     embed = discord.Embed(title="", description=f"```yaml\nPing:   {client.latency*1000:,.0f} ms \nUptime: {uptime}```")
-    await interaction.response.send_message("Pong!", embed=embed, ephemeral=False)
+    await interaction.response.send_message("**Pong!**", embed=embed, ephemeral=False)
 
 
 client.run(TOKEN)
