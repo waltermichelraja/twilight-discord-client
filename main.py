@@ -13,7 +13,7 @@ client=commands.Bot(command_prefix=";", intents=intents)
 load_dotenv()
 TOKEN=os.getenv("TOKEN")
 
-@client.event()
+@client.event
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="/help"))
     print(f"--logged in as {client.user}--")
