@@ -1,5 +1,6 @@
 import discord
 import os
+import asyncio
 import datetime, time
 from discord import app_commands
 from discord.ext import commands, tasks
@@ -44,5 +45,8 @@ async def load_extensions():
         if filename.endswith(".py"):
             await client.load_extension(f"cogs.{filename[:-3]}")
 
-load_extensions()
-client.run(TOKEN)
+async def main():
+    async with client:
+        await load_extensions()
+        await client.start(TOKEN)
+asyncio.run(main())
