@@ -14,7 +14,7 @@ TOKEN=os.getenv("TOKEN")
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="/help"))
     print(f"--logged in as {client.user}--")
-    print("-----------------------------")
+    print("------------------------------")
     global startTime
     startTime = time.time()
     try:
