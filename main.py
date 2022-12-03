@@ -10,24 +10,23 @@ class MyClient(discord.Client):
         super().__init__(intents=intents)
         self.tree=app_commands.CommandTree(self)
 
+    async def on_ready(self):
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="/help"))
+        print(f"--logged in as {client.user}--")
+        print("------------------------------")
+        global startTime
+        startTime = time.time()
+        try:
+            sync=await client.tree.sync()
+            print(f"--commands synced: {len(sync)}--")
+        except Exception as e:
+            print(e)
+
 intents=discord.Intents.default()
 client=MyClient(intents=intents)
 
 load_dotenv()
 TOKEN=os.getenv("TOKEN")
-
-@client.event
-async def on_ready():
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="/help"))
-    print(f"--logged in as {client.user}--")
-    print("------------------------------")
-    global startTime
-    startTime = time.time()
-    try:
-        sync=await client.tree.sync()
-        print(f"--commands synced: {len(sync)}--")
-    except Exception as e:
-        print(e)
 
 @client.tree.command(name="ping", description="sends client latency")
 async def ping(interaction:discord.Interaction):
