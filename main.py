@@ -3,7 +3,6 @@ import os
 import datetime, time
 from discord import app_commands
 from discord.ext import commands, tasks
-from itertools import cycle
 from dotenv import load_dotenv
 
 intents=discord.Intents.all()
@@ -13,8 +12,9 @@ TOKEN=os.getenv("TOKEN")
 
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=";help"))
-    print("--Twilight\'s online!--")
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="/help"))
+    print(f"--logged in as {client.user}--")
+    print("-----------------------------")
     global startTime
     startTime = time.time()
     try:
@@ -34,5 +34,9 @@ async def ping(interaction:discord.Interaction):
     embed=discord.Embed(title="", description=f"```elm\nPing:         {client.latency*1000:,.0f} ms \nResponseTime: {(end-start)*1000:,.0f} ms \nUptime:       {uptime}```")
     await interaction.edit_original_response(content="**Pong!**", embed=embed)
 
+
+for filename in os.listdir("./cogs"):
+      if filename.endswith(".py"):
+            client.load_extension(f"cogs.{filename[:-3]}")
 
 client.run(TOKEN)
