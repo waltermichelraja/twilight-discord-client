@@ -6,7 +6,7 @@ class User(commands.Cog):
     def __init__(self, client):
         self.client=client
 
-    @app_commands.CommandTree.command(name="cog", description="cog test")
+    @app_commands.command(name="cog", description="cog test")
     async def cog(self, interaction:discord.Interaction):
         await interaction.response.send_message("hello!", ephemeral=True)
 
