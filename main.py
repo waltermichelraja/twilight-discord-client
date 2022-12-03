@@ -6,13 +6,9 @@ from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
 class MyClient(discord.Client):
-    def __init__(self, *, intents: discord.Intents):
+    def __init__(self, *, intents:discord.Intents):
         super().__init__(intents=intents)
         self.tree=app_commands.CommandTree(self)
-
-    async def setup_hook(self):
-        self.tree.copy_global_to(guild=855003897138774048)
-        await self.tree.sync(guild=855003897138774048)
 
 intents=discord.Intents.default()
 client=MyClient(intents=intents)
