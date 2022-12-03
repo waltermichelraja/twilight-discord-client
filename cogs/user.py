@@ -3,7 +3,7 @@ from discord import app_commands
 from discord.ext import commands, tasks
 
 class User(commands.Cog):
-    def __init__(self, client) -> None:
+    def __init__(self, client):
         self.client=client
     async def on_ready(self):
         await self.client.tree.sync()
@@ -12,5 +12,5 @@ class User(commands.Cog):
     async def cog(self, interaction:discord.Interaction):
         await interaction.response.send_message("hello!", ephemeral=True)
 
-async def setup(client) -> None:
+async def setup(client):
     await client.add_cog(User(client))

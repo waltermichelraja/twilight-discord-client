@@ -42,6 +42,7 @@ async def ping(interaction:discord.Interaction):
 async def load_extensions():
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
-                await client.load_extension(f"cogs.{filename[:-3]}")
+            await client.load_extension(f"cogs.{filename[:-3]}")
 
+load_extensions()
 client.run(TOKEN)
