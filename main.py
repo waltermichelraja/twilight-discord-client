@@ -5,8 +5,18 @@ from discord import app_commands
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
-intents=discord.Intents.all()
-client=commands.Bot(command_prefix=";", intents=intents)
+class MyClient(discord.Client):
+    def __init__(self, *, intents: discord.Intents):
+        super().__init__(intents=intents)
+        self.tree=app_commands.CommandTree(self)
+
+    async def setup_hook(self):
+        self.tree.copy_global_to(guild=855003897138774048)
+        await self.tree.sync(guild=855003897138774048)
+
+intents=discord.Intents.default()
+client=MyClient(intents=intents)
+
 load_dotenv()
 TOKEN=os.getenv("TOKEN")
 
@@ -22,7 +32,6 @@ async def on_ready():
         print(f"--commands synced: {len(sync)}--")
     except Exception as e:
         print(e)
-
 
 @client.tree.command(name="ping", description="sends client latency")
 async def ping(interaction:discord.Interaction):
