@@ -20,7 +20,9 @@ async def on_ready():
     print("------------------------------")
     global startTime
     startTime = time.time()
-    await client.load_extension("cogs/user.py")
+    for filename in os.listdir("./cogs"):
+        if filename.endswith(".py"):
+            await client.load_extension(f"cogs.{filename[:-3]}")
     try:
         sync=await client.tree.sync()
         print(f"--commands synced: {len(sync)}--")
