@@ -20,6 +20,7 @@ async def on_ready():
     print("------------------------------")
     global startTime
     startTime = time.time()
+    await client.load_extension("cogs/user.py")
     try:
         sync=await client.tree.sync()
         print(f"--commands synced: {len(sync)}--")
@@ -36,7 +37,5 @@ async def ping(interaction:discord.Interaction):
     embed=discord.Embed(title="", description=f"```elm\nPing:         {client.latency*1000:,.0f} ms \nResponseTime: {(end-start)*1000:,.0f} ms \nUptime:       {uptime}```")
     await interaction.edit_original_response(content="**Pong!**", embed=embed)
 
-
-client.load_extension(f"cogs.user.py")
 
 client.run(TOKEN)
