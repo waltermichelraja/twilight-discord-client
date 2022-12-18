@@ -11,7 +11,7 @@ class User(commands.Cog):
         user=interaction.user if not user else user
         embed=discord.Embed(title=f"User Details | {user}", color=interaction.user.color)
         embed.add_field(name="Account creation: ", value=user.created_at.strftime("`%a, %#d %B %Y, %I:%M %p`"), inline=True)
-        embed.set_footer(text=f"ID: {interaction.user.id}")
+        embed.set_footer(text=f"ID: {user.id}")
         await interaction.response.send_message(embed=embed, ephemeral=False)
 
 async def setup(client):
