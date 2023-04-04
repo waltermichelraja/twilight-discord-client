@@ -2,6 +2,7 @@ import discord
 import os
 import asyncio
 import datetime, time
+from discord import app_commands
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
