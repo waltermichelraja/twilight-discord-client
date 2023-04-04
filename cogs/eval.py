@@ -8,7 +8,7 @@ from discord.ext import commands, tasks
 from contextlib import redirect_stdout
 
 class Eval(commands.Cog):
-    def __init__(self, client):
+    def __init__(self, client:commands.Bot):
         self.client=client
         self.result=""
 
@@ -17,8 +17,7 @@ class Eval(commands.Cog):
             return "\n".join(content.split("\n")[1:-1])
         return content.strip("` \n")
     
-    @app_commands.command()
-    @commands.is_owner()
+    @app_commands.command(name="execute")
     async def eval(self, ctx, *, interaction: discord.Interaction, body: str):
         env={
             "discord": discord,
@@ -63,5 +62,5 @@ class Eval(commands.Cog):
                 evem=discord.Embed(title="", description=f"`Result`\n```py\n{value}{ret}\n```")
                 await interaction.response.send_message(embed=evem)
 
-async def setup(client):
+async def setup(client:commands.Bot)-> None:
     await client.add_cog(Eval(client))

@@ -6,23 +6,24 @@ from discord import app_commands
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
-client=discord.Client(intents=discord.Intents.default())
-intents=discord.Intents.all()
-client=commands.Bot(command_prefix="--", intents=intents)
+class Twilight(discord.Client):
+    def __init__(self, *, intents: discord.Intents):
+        super().__init__(command_prefix="--", intents=intents)
+        self.tree=app_commands.CommandTree(self)
+    async def setup_hook(self):
+        for filename in os.listdir("./cogs"):
+            if filename.endswith(".py"):
+                await client.load_extension(f"cogs.{filename[:-3]}")
 
-load_dotenv()
-TOKEN=os.getenv("TOKEN")
+intents=discord.Intents.default()
+client=Twilight(intents=intents)
 
-@client.event
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="/help"))
     print(f"--logged in as {client.user}--")
     print("------------------------------")
     global startTime
     startTime = time.time()
-    for filename in os.listdir("./cogs"):
-        if filename.endswith(".py"):
-            await client.load_extension(f"cogs.{filename[:-3]}")
     try:
         sync=await client.tree.sync()
         print(f"--commands synced: {len(sync)}--")
@@ -39,5 +40,6 @@ async def ping(interaction:discord.Interaction):
     embed=discord.Embed(title="", description=f"```elm\nPing:         {client.latency*1000:,.0f} ms \nUptime:       {uptime} \nResponseTime: {(end-start)*1000:,.0f} ms ```")
     await interaction.edit_original_response(content="**Pong!**", embed=embed)
 
-
+load_dotenv()
+TOKEN=os.getenv("TOKEN")
 client.run(TOKEN)
