@@ -17,7 +17,6 @@ class Eval(commands.Cog):
             return "\n".join(content.split("\n")[1:-1])
         return content.strip("` \n")
 
-    @app_commands.command(name="execute")
     @commands.command(aliases=["evaluate", "exe", "execute"], pass_context=True)
     @commands.is_owner()
     async def eval(self, ctx, *, body: str):
