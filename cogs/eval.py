@@ -1,7 +1,6 @@
 import discord
 import io, os, sys
 import datetime, time
-import numpy
 import textwrap
 import traceback
 from discord import app_commands
@@ -35,8 +34,7 @@ class Eval(commands.Cog):
             "os": os,
             "sys": sys,
             "datetime": datetime,
-            "time": time,
-            "numpy": numpy
+            "time": time
         }
         env.update(globals())
         body = self.escape_quote(body)
