@@ -6,16 +6,9 @@ from discord import app_commands
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
-class Twilight(discord.Client):
-    def __init__(self, *, intents: discord.Intents):
-        super().__init__(command_prefix="--", intents=intents)
-        self.tree = app_commands.CommandTree(self)
-    async def setup_hook(self):
-        self.tree.copy_global_to(guild=discord.Object(id=855003897138774048))
-        await self.tree.sync(guild=discord.Object(id=855003897138774048))
-
-intents = discord.Intents.default()
-client = Twilight(intents=intents)
+client=discord.Client(intents=discord.Intents.default())
+intents=discord.Intents.all()
+client=commands.Bot(command_prefix="--", intents=intents)
 
 load_dotenv()
 TOKEN=os.getenv("TOKEN")
