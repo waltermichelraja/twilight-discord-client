@@ -20,7 +20,7 @@ class Eval(commands.Cog):
             return "\n".join(content.split("\n")[1:-1])
         return content.strip("` \n")
     
-    @commands.hybrid_command(name="execute", aliases=["evaluate", "exe", "execute"], pass_context=True, with_app_command=True)
+    @commands.hybrid_command(aliases=["evaluate", "exe", "execute"], pass_context=True, with_app_command=True)
     @app_commands.guilds(discord.Object(id=855003897138774048))
     @commands.is_owner()
     async def eval(self, ctx, *, body: str):
