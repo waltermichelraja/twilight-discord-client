@@ -32,11 +32,11 @@ async def on_ready():
 @client.tree.command(name="ping", description="sends client latency")
 async def ping(interaction:discord.Interaction):
     uptime=str(datetime.timedelta(seconds=int(round(time.time()-startTime))))
-    embed=discord.Embed(title="", description=f"```elm\nPing:   {client.latency*1000:,.0f} ms \nUptime: {uptime}```")
+    embed=discord.Embed(title="", description=f"```js\nPing:   {client.latency*1000:,.0f} ms \nUptime: {uptime}```")
     start=time.time()
     await interaction.response.send_message("**Pong!**", embed=embed, ephemeral=False)
     end=time.time()
-    embed=discord.Embed(title="", description=f"```elm\nPing:         {client.latency*1000:,.0f} ms \nResponseTime: {(end-start)*1000:,.0f} ms \nUptime:       {uptime}```")
+    embed=discord.Embed(title="", description=f"```js\nPing:         {client.latency*1000:,.0f} ms \nUptime:       {uptime} \nResponseTime: {(end-start)*1000:,.0f} ms ```")
     await interaction.edit_original_response(content="**Pong!**", embed=embed)
 
 
