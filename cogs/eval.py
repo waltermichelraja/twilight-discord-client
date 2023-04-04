@@ -11,9 +11,6 @@ class Eval(commands.Cog):
     def __init__(self, client):
         self.client=client
         self.result=""
-    
-    async def setup_hook(self):
-        await self.tree.sync(guild=discord.Object(id=855003897138774048))
 
     def escape_quote(self, content):
         if content.startswith("```") and content.endswith("```"):
