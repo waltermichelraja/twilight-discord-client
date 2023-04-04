@@ -11,13 +11,17 @@ class Eval(commands.Cog):
     def __init__(self, client):
         self.client=client
         self.result=""
+    
+    async def setup_hook(self):
+        await self.tree.sync(guild=discord.Object(id=855003897138774048))
 
     def escape_quote(self, content):
         if content.startswith("```") and content.endswith("```"):
             return "\n".join(content.split("\n")[1:-1])
         return content.strip("` \n")
     
-    @commands.command(aliases=["evaluate", "exe", "execute"], pass_context=True)
+    @commands.hybrid_command(name="execute", aliases=["evaluate", "exe", "execute"], pass_context=True, with_app_command=True)
+    @app_commands.guilds(discord.Object(id=855003897138774048))
     @commands.is_owner()
     async def eval(self, ctx, *, body: str):
         env={
