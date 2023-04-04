@@ -17,8 +17,9 @@ class Eval(commands.Cog):
             return "\n".join(content.split("\n")[1:-1])
         return content.strip("` \n")
     
-    @app_commands.command(name="execute")
-    async def eval(self, ctx, *, interaction: discord.Interaction, body: str):
+    @commands.command(aliases=["evaluate", "exe", "execute"], pass_context=True)
+    @commands.is_owner()
+    async def eval(self, ctx, *, body: str):
         env={
             "discord": discord,
             "commands": commands,
@@ -42,7 +43,7 @@ class Eval(commands.Cog):
             exec(to_compile, env)
         except Exception as e:
             evem=discord.Embed(title="", description=f"`Result`\n```py\n{e.__class__.__name__}: {e}\n```")
-            return await interaction.response.send_message(embed=evem)
+            return await ctx.send(embed=evem)
         func=env["func"]
         try:
             with redirect_stdout(stdout):
@@ -50,17 +51,17 @@ class Eval(commands.Cog):
         except Exception as e:
             value=stdout.getvalue()
             evem=discord.Embed(title="", description=f"`Result`\n```py\n{value}{traceback.format_exc()}\n```")
-            await interaction.response.send_message(embed=evem)
+            await ctx.send(embed=evem)
         else:
             value=stdout.getvalue()
             if ret is None:
                 if value:
                     evem=discord.Embed(title="", description=f"`Result`\n```py\n{value}\n```")
-                    await interaction.response.send_message(embed=evem)
+                    await ctx.send(embed=evem)
             else:
                 self.result=ret
                 evem=discord.Embed(title="", description=f"`Result`\n```py\n{value}{ret}\n```")
-                await interaction.response.send_message(embed=evem)
+                await ctx.send(embed=evem)
 
 async def setup(client:commands.Bot)-> None:
     await client.add_cog(Eval(client))
