@@ -18,7 +18,7 @@ class Eval(commands.Cog):
         return content.strip("` \n")
     
     @commands.hybrid_command(aliases=["evaluate", "exe", "execute"], pass_context=True, with_app_command=True)
-    @app_commands.guilds(discord.Object(id=855003897138774048))
+    @app_commands.command()
     @commands.is_owner()
     async def eval(self, ctx, *, body: str):
         env={
