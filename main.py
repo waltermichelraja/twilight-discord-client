@@ -4,7 +4,6 @@ import datetime, time
 from discord.ext import commands
 from dotenv import load_dotenv
 
-client=discord.Client(intents=discord.Intents.default())
 intents=discord.Intents.all()
 client=commands.Bot(command_prefix="--", intents=intents)
 
