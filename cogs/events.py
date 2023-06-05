@@ -2,7 +2,8 @@ import discord
 from discord.ext import commands, tasks
 
 class Events(commands.Cog):
-    def __init__(self, client):
+    def __init__(self, ctx, client):
+        self.ctx=ctx
         self.client=client
         self.stat.start()
 
