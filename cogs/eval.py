@@ -3,8 +3,7 @@ import io, os, sys
 import datetime, time
 import textwrap
 import traceback
-from discord import app_commands
-from discord.ext import commands, tasks
+from discord.ext import commands
 from contextlib import redirect_stdout
 
 class Eval(commands.Cog):
