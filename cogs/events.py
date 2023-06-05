@@ -10,7 +10,7 @@ class Events(commands.Cog):
         for guild in self.client.guilds:
           for channel in guild.channels:
             if channel.id==1047931306627039313:
-              await channel.edit(name=f"Members: {(len([m for m in ctx.guild.members if not m.bot]))}")
+              await channel.edit(name=f"Members: {len(list(filter(lambda m: not m.bot, ctx.guild.members)))}")
     @stat.before_loop
     async def stat_before(self):
         await self.client.wait_until_ready()
