@@ -16,7 +16,7 @@ async def on_ready():
     print(f"--logged in as {client.user}--")
     print("------------------------------")
     global startTime
-    startTime = time.time()
+    startTime=time.time()
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
             await client.load_extension(f"cogs.{filename[:-3]}")
@@ -26,7 +26,7 @@ async def on_ready():
     except Exception as e:
         print(e)
 
-@client.tree.command(name="ping", description="returns client latency")
+@client.tree.command(name="ping", description="returns client latency", guild=NotImplemented)
 async def ping(interaction:discord.Interaction):
     uptime=str(datetime.timedelta(seconds=int(round(time.time()-startTime))))
     embed=discord.Embed(title="", description=f"```elm\nPing:   {client.latency*1000:,.0f} ms \nUptime: {uptime}```")
