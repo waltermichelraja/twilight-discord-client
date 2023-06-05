@@ -6,11 +6,11 @@ class Events(commands.Cog):
         self.stat.start()
 
     @tasks.loop(minutes=15, reconnect=True)
-    async def stat(ctx, self):
+    async def stat(self, ctx):
         for guild in self.client.guilds:
           for channel in guild.channels:
             if channel.id==1047931306627039313:
-              await channel.edit(name=f"Members: {(len([m for m in self.ctx.guild.members if not m.bot]))}")
+              await channel.edit(name=f"Members: {(len([m for m in ctx.guild.members if not m.bot]))}")
     @stat.before_loop
     async def stat_before(self):
         await self.client.wait_until_ready()
