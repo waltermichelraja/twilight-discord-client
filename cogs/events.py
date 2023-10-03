@@ -1,32 +1,23 @@
-from datetime import datetime
+import discord
+from discord import app_commands
 from discord.ext import commands, tasks
 
 class Events(commands.Cog):
     def __init__(self, client):
         self.client=client
-        self.stat.start()
-        self.utc.start()
 
-    @tasks.loop(minutes=60, reconnect=True)
-    async def stat(self):
-        for guild in self.client.guilds:
-          for channel in guild.channels:
-            if channel.id==1047931306627039313:
-              await channel.edit(name=f"Members : {len(list(filter(lambda m: not m.bot, channel.guild.members)))}")
-    @stat.before_loop
-    async def stat_before(self):
-        await self.client.wait_until_ready()
-
-    @tasks.loop(minutes=10, reconnect=True)
-    async def utc(self):
-        utc=datetime.now().strftime("%H:%M%p")
-        for guild in self.client.guilds:
-          for channel in guild.channels:
-            if channel.id==1115360100215947327:
-                await channel.edit(name = f"UTC : {utc}")
-    @utc.before_loop
-    async def utc_before(self):
-        await self.client.wait_until_ready()
+    @app_commands.command(name="sync", description="sync database")
+    @app_commands.
+    async def sync(self, interaction:discord.Interaction):
+        try:
+          for user in list(filter(lambda m: not m.bot, self.client.users)):
+            self.DB.open_credits(user)
+          self.DB.commit()
+          embed=discord.Embed(description=f"`Result`\n```elm\nsuccessfully updated database...")
+          await interaction.response.send_message(embed=embed, ephemeral=True)
+        except Exception as e:
+          embed=discord.Embed(description=f"`Result`\n```elm\nerror: {e}")
+          await interaction.response.send_message(embed=embed, ephemeral=True)
 
 async def setup(client)-> None:
     await client.add_cog(Events(client))

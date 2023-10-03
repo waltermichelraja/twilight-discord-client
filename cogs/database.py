@@ -1,27 +1,28 @@
 import sqlite3
-import discord
 from discord.ext import commands
 from typing import Tuple
 
 class Database(commands.Cog):
     def __init__(self, client):
         self.client=client
-        self.con=None
-        self.pointer=None
+        self.db = sqlite3.connect('credits.db')
+        self.cursor = self.db.cursor()
 
-    async def connect(self):
-        self.con = sqlite3.connect("credits.db")
-        self.pointer = self.con.cursor()
+    def open_credits(self, user):
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS credits (userid INTEGER PRIMARY KEY, username TEXT, credits INTEGER)")
+        self.cursor.execute(f"SELECT * FROM credits WHERE userid = ?", (user.id,))
+        result=self.cursor.fetchone()
+        if result:
+            return
+        if not result:
+            sql = "INSERT INTO credits VALUES(?,?,?)"
+            val = (user.id, user.name, 0)
 
-    async def open(self, rec: Tuple=()):
-        self.pointer.executemany("INSERT INTO credits VALUES(?,?)", rec)
+            self.cursor.execute(sql, val)
+            self.db.commit()
 
-    async def update(self, id):
-        self.pointer.execute(f"UPDATE FROM credits WHERE userid={id}")
-
-    async def close(self):
-        self.con.commit()
-        self.con.close()
+    def commit(self):
+        self.db.commit()
 
 
 async def setup(client)->None:
