@@ -1,11 +1,9 @@
 import sqlite3
-from discord.ext import commands
-from typing import Tuple
 
-class Database(commands.Cog):
+class Database():
     def __init__(self, client):
         self.client=client
-        self.db = sqlite3.connect('credits.db')
+        self.db = sqlite3.connect("credits.db")
         self.cursor = self.db.cursor()
 
     def open_credits(self, user):
@@ -15,15 +13,12 @@ class Database(commands.Cog):
         if result:
             return
         if not result:
-            sql = "INSERT INTO credits VALUES(?,?,?)"
+            cmd = "INSERT INTO credits VALUES(?,?,?)"
             val = (user.id, user.name, 0)
 
-            self.cursor.execute(sql, val)
+            self.cursor.execute(cmd, val)
             self.db.commit()
 
-    def commit(self):
-        self.db.commit()
-
-
-async def setup(client)->None:
-    await client.add_cog(Database(client))
+    def disconnect(self):
+        self.cursor.close()
+        self.db.close()

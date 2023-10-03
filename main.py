@@ -26,6 +26,7 @@ async def on_ready():
     except Exception as e:
         print(e)
 
+
 @client.tree.command(name="ping", description="returns client latency")
 async def ping(interaction:discord.Interaction):
     uptime=str(datetime.timedelta(seconds=int(round(time.time()-startTime))))
