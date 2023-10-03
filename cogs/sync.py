@@ -10,10 +10,7 @@ class Sync(commands.Cog):
     
     def is_chief():
         def predicate(interaction: discord.Interaction) -> bool:
-            if interaction.user.id == 85309593344815104:
-                return True
-            else:
-                
+            return interaction.user.id == 816963491554131998 # me :)
         return app_commands.check(predicate)
 
     @app_commands.command(name="sync", description="sync database")
@@ -24,7 +21,7 @@ class Sync(commands.Cog):
                 self.DB.open_credits(user)
             embed=discord.Embed(description=f"`Result`\n```elm\nsuccessfully updated database...```")
             await interaction.response.send_message(embed=embed, ephemeral=True)
-        except Exception app_commands.errors.CheckFailure as e:
+        except Exception as e:
             embed=discord.Embed(description=f"`Result`\n```elm\nerror: {e}```")
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
