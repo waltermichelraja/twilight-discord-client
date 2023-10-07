@@ -1,8 +1,7 @@
 import sqlite3
 
 class Database():
-    def __init__(self, client):
-        self.client=client
+    def __init__(self):
         self.db = sqlite3.connect("credits.db")
         self.cursor = self.db.cursor()
 
@@ -22,3 +21,5 @@ class Database():
     def disconnect(self):
         self.cursor.close()
         self.db.close()
+
+DB=Database()
