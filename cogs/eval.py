@@ -1,11 +1,10 @@
 import discord
 import sqlite3
-import io, os, sys
-import datetime, time
-import textwrap
-import traceback
+import io, os, sys, datetime, time
+import textwrap, traceback
 from discord.ext import commands
 from contextlib import redirect_stdout
+from modules.database import *
 
 class Eval(commands.Cog):
     def __init__(self, client):
