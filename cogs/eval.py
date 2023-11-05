@@ -1,15 +1,17 @@
 import discord
-import io, os, sys
-import datetime, time
-import textwrap
-import traceback
+import sqlite3
+import io, os, sys, datetime, time
+import textwrap, traceback
 from discord.ext import commands
 from contextlib import redirect_stdout
+from modules.database import *
 
 class Eval(commands.Cog):
     def __init__(self, client):
         self.client=client
         self.result=""
+        self.db=sqlite3.connect("credits.db")
+        self.cursor=self.db.cursor()
 
     def escape_quote(self, content):
         if content.startswith("```") and content.endswith("```"):
@@ -32,7 +34,9 @@ class Eval(commands.Cog):
             "os": os,
             "sys": sys,
             "datetime": datetime,
-            "time": time
+            "time": time,
+            "db": self.db,
+            "cursor": self.cursor
         }
         env.update(globals())
         body=self.escape_quote(body)

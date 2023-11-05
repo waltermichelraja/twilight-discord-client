@@ -22,9 +22,10 @@ async def on_ready():
             await client.load_extension(f"cogs.{filename[:-3]}")
     try:
         sync=await client.tree.sync()
-        print(f"--commands synced: {len(sync)}--")
+        print(f"=> commands synced: {len(sync)}")
     except Exception as e:
         print(e)
+
 
 @client.tree.command(name="ping", description="returns client latency")
 async def ping(interaction:discord.Interaction):
