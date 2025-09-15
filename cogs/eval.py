@@ -1,26 +1,26 @@
 import discord
 import sqlite3
-import io, os, sys, datetime, time
-import textwrap, traceback
+import io, os, sys, datetime, time, textwrap, traceback, contextlib
 from discord.ext import commands
-from contextlib import redirect_stdout
-from modules.database import *
 
 class Eval(commands.Cog):
-    def __init__(self, client):
+    def __init__(self, client: commands.Bot):
         self.client=client
-        self.result=""
+        self._last_result=None
         self.db=sqlite3.connect("credits.db")
         self.cursor=self.db.cursor()
 
-    def escape_quote(self, content):
+    def cog_unload(self):
+        if self.db:
+            self.db.close()
+
+    @staticmethod
+    def cleanup_code(content: str) -> str:
         if content.startswith("```") and content.endswith("```"):
             return "\n".join(content.split("\n")[1:-1])
         return content.strip("` \n")
-    
-    @commands.command(aliases=["evaluate", "exe", "execute"], pass_context=True)
-    @commands.is_owner()
-    async def eval(self, ctx, *, body: str):
+
+    def get_environment(self, ctx) -> dict:
         env={
             "discord": discord,
             "commands": commands,
@@ -30,41 +30,53 @@ class Eval(commands.Cog):
             "author": ctx.author,
             "guild": ctx.guild,
             "message": ctx.message,
-            "self": self,
             "os": os,
             "sys": sys,
             "datetime": datetime,
             "time": time,
             "db": self.db,
-            "cursor": self.cursor
+            "cursor": self.cursor,
+            "_": self._last_result,
         }
         env.update(globals())
-        body=self.escape_quote(body)
+        return env
+
+    async def send_result(self, ctx, result: str):
+        if len(result)<=1900:
+            embed=discord.Embed(description=f"`Result`\n```py\n{result}\n```")
+            await ctx.send(embed=embed)
+        else:
+            with io.StringIO(result) as file:
+                await ctx.send(file=discord.File(file, "eval.txt"))
+
+    @commands.command(aliases=["evaluate", "exe", "execute"], pass_context=True)
+    @commands.is_owner()
+    async def eval(self, ctx, *, body: str):
+        body=self.cleanup_code(body)
+        env=self.get_environment(ctx)
         stdout=io.StringIO()
-        to_compile=f'async def func():\n{textwrap.indent(body, "  ")}'
+        code=f"async def func():\n{textwrap.indent(body, '  ')}"
         try:
-            exec(to_compile, env)
+            exec(code, env)
         except Exception as e:
-            evem=discord.Embed(title="", description=f"`Result`\n```py\n{e.__class__.__name__}: {e}\n```")
-            return await ctx.send(embed=evem)
+            return await self.send_result(ctx, f"{e.__class__.__name__}: {e}")
         func=env["func"]
         try:
-            with redirect_stdout(stdout):
+            with contextlib.redirect_stdout(stdout):
                 ret=await func()
-        except Exception as e:
+        except Exception:
             value=stdout.getvalue()
-            evem=discord.Embed(title="", description=f"`Result`\n```py\n{value}{traceback.format_exc()}\n```")
-            await ctx.send(embed=evem)
+            result=f"{value}{traceback.format_exc()}"
+            return await self.send_result(ctx, result)
+        value=stdout.getvalue()
+        if ret is None:
+            if value:
+                await self.send_result(ctx, value)
         else:
-            value=stdout.getvalue()
-            if ret is None:
-                if value:
-                    evem=discord.Embed(title="", description=f"`Result`\n```py\n{value}\n```")
-                    await ctx.send(embed=evem)
-            else:
-                self.result=ret
-                evem=discord.Embed(title="", description=f"`Result`\n```py\n{value}{ret}\n```")
-                await ctx.send(embed=evem)
+            self._last_result=ret
+            result=f"{value}{ret!r}"
+            await self.send_result(ctx, result)
 
-async def setup(client)-> None:
+
+async def setup(client: commands.Bot):
     await client.add_cog(Eval(client))
